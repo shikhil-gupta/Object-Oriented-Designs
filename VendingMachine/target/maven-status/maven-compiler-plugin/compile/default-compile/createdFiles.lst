@@ -1,0 +1,13 @@
+vending/machine/IVendingMachine.class
+vending/machine/dispenser/CashDispenser.class
+vending/machine/constants/BillsValue.class
+vending/machine/exception/VendingMachineException.class
+vending/machine/dispenser/Bill.class
+vending/machine/constants/VendingMachineCodes.class
+vending/machine/Session.class
+vending/machine/VendingMachine.class
+vending/machine/dispenser/ICashDispenser.class
+vending/machine/inventory/Inventory.class
+vending/machine/constants/VendingMachineStates.class
+vending/machine/CustomerConsole.class
+vending/machine/inventory/Item.class

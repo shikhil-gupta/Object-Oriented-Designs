@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="atm-design" />
+        <module name="incident-alert" />
+        <module name="ThreadPoolExecutorService" />
+        <module name="simple-search-inventory" />
+        <module name="custom-logger" />
+        <module name="vending-machine" />
+        <module name="connectionpooling" />
+        <module name="elevator_design" />
+        <module name="main-application" />
+        <module name="battleship" />
+        <module name="connection-pooling" />
+        <module name="movie-booking" />
+        <module name="chess-game" />
+        <module name="OnlineTaxiBooking" />
+        <module name="parking-lot" />
+        <module name="blockingqueuedesign" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
