@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/ATMDesign/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Connection Pooling With Blocking Queue/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/InMemory-Cache/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OnlineTaxiBooking/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ThreadPoolExecutorService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TollManagementDesign/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/VendingMachine/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/battle-ship/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blocking-queue-design/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/chess-game/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/connection-pooling/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/customlogger/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/elevator_design/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/incidentalert/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mainapplication/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/movie-booking/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/parking_lot/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/simple-search-inventory/src/main/java" charset="UTF-8" />
+  </component>
+</project>
