@@ -18,8 +18,7 @@ public class CreditCardPayment implements Payment {
     }
 
     @Override
-    public void pay() {
-        System.out.println("payment done using Credit card");
-    }
+    public void pay(double amount) {
 
+    }
 }

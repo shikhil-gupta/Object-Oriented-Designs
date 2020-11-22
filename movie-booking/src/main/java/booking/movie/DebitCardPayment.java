@@ -18,7 +18,7 @@ public class DebitCardPayment implements Payment {
     }
 
     @Override
-    public void pay() {
+    public void pay(double amount) {
 
     }
 }

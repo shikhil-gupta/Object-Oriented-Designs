@@ -17,7 +17,7 @@ public class Booking {
     private List<Integer> seatsChoosen;
     private Integer cinemaThreatureid;
     private Screen screen;
-    private Integer bookingamount;
+    private double bookingamount;
     private PaymentStatus paymentStatus;
     private BookingStatus bookingStatus;
 
@@ -25,7 +25,9 @@ public class Booking {
     public void makePayment(Payment payment) {
 
         //pass booking id and totalAmount
-        payment.pay();
+        // pass web hook/api end to payment geteways,
+        // after the payment complete webhook will be called by them with status
+        payment.pay(bookingamount);
     }
 
     public Integer save() {

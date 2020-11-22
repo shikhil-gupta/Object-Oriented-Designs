@@ -1,5 +1,4 @@
 package booking.movie;
-
 import java.util.List;
 
 public class Screen {
@@ -7,8 +6,9 @@ public class Screen {
     private Integer screenId;
     private String screenName;
     private List<Seat> seatList;
-    private Show movieShow;
 
+    //sorted by start time.
+    private List<Show> listOfShow;
 
     public synchronized void bookSeat(List<Integer> seats) {
         //block seats here
