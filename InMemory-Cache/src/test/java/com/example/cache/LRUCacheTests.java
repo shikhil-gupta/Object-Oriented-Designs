@@ -29,7 +29,6 @@ public class LRUCacheTests {
         cache.put("hello3", 3);
 
         Assert.isTrue(cache.getEmptySlots() == 0);
-        Assert.isTrue(leastRecentlyUsedStrategy.getCurrentCapacity() == 3);
 
         Node<Integer> head = leastRecentlyUsedStrategy.getHead().getRight();
         Node<Integer> tail = leastRecentlyUsedStrategy.getTail();
