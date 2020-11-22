@@ -2,9 +2,11 @@ package com.example.cache.Impl;
 
 import com.example.cache.Interface.ICache;
 import com.example.cache.strategy.IEvictionStrategy;
+import lombok.Getter;
 
 import java.util.HashMap;
 
+@Getter
 public class CacheImpl<V> implements ICache<V> {
 
     private int emptySlots;
@@ -20,20 +22,20 @@ public class CacheImpl<V> implements ICache<V> {
     @Override
     public void put(final String key, final V value) {
 
-        if(map.containsKey(key)) {
-            map.remove(key);
-            evictionStrategy.delete(key);
-            emptySlots++;
+        if(map.containsKey(key))
+        {
+            map.put(key, value);
+            this.evictionStrategy.addToTop(key, value);
         }
-
-        if(emptySlots > 0) {
+        else {
             this.map.put(key, value);
             this.evictionStrategy.addToTop(key, value);
             emptySlots--;
-        } else {
-            this.evictionStrategy.evict();
-            this.map.put(key, value);
-            this.evictionStrategy.addToTop(key, value);
+
+            if(emptySlots < 0) {
+                String oldKey = this.evictionStrategy.evict();
+                this.map.remove(oldKey);
+            }
         }
     }
 
