@@ -6,7 +6,9 @@ import com.elevator.design.constants.States;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
@@ -25,11 +27,19 @@ public class Elevator implements Runnable {
 
     private States currentState;
 
-    private HashMap<Integer, Request> floorToRequestMap;
+    private TreeSet<Integer> upDestinationRequest;
+
+    private TreeSet<Integer> downDestinationRequest;
 
     public Elevator() {
-        floorToRequestMap = new HashMap<>();
-        currentDirections = Directions.DEFAULT;
+        upDestinationRequest = new TreeSet<>();
+        downDestinationRequest = new TreeSet<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        currentDirections = Directions.NONE;
         currentState = States.WAITING;
     }
 
@@ -39,103 +49,110 @@ public class Elevator implements Runnable {
             try {
                 synchronized (this) {
                     if (currentState == States.WAITING) {
-                        currentDirections = Directions.DEFAULT;
+                        currentDirections = Directions.NONE;
                         wait();
                     }
                 }
 
-                if (currentState == States.STOP) {
-                    break;
-                }
-                while (currentState == States.MOVING) {
-
-                    boolean stopToCurrenFloor = false;
-                    synchronized (floorToRequestMap) {
-                        if (floorToRequestMap.get(currentFloor.get()) != null) {
-                            floorToRequestMap.put(currentFloor.get(), null);
-                            stopToCurrenFloor = true;
-                        }
-                    }
-                    if (stopToCurrenFloor) {
-                        synchronized (this) {
-                            currentState = States.OPENDOOR;
-                        }
+                setDirections();
+                if(currentDirections == Directions.UP) {
+                    if(currentFloor.intValue() == upDestinationRequest.first()) {
                         openDoor();
-                        synchronized (this) {
-                            currentState = States.CLOSEDDOOR;
-                        }
                         closeDoor();
+                        popUpDestination();
                     }
-
-                    if (!canMoveUp() || !canMoveDown()) {
-                        synchronized (this) {
-                            currentState = States.WAITING;
-                            currentDirections = Directions.DEFAULT;
-                        }
-                        break;
-                    }
-                    waitingToReachNextFloor();
-
                 }
+                else {
+                    if(currentFloor.intValue() == downDestinationRequest.first()) {
+                        openDoor();
+                        closeDoor();
+                        popDownDestination();
+                    }
+                }
+                updateCurrentState();
+                waitingToReachNextFloor();
             } catch (Exception ex) {
-                currentDirections = Directions.DEFAULT;
+                currentDirections = Directions.NONE;
                 currentState = States.WAITING;
             }
         }
     }
 
-    private void waitingToReachNextFloor() throws InterruptedException {
-        Thread.sleep(10000);
-        if (currentDirections == Directions.UP) {
-            currentFloor.incrementAndGet();
-        } else {
-            currentFloor.decrementAndGet();
+    // update status to moving only when state is waiting,
+    // we can refactor this code further.
+    // This function will be called by Elevator manager to set moving.
+    public void updateStatus(States state)
+    {
+        if(currentState == States.MOVING) {
+            return;
+        }
+
+        currentState = state;
+    }
+
+    private void updateCurrentState() {
+        if(!(upDestinationRequest.size() > 0 || downDestinationRequest.size() > 0)) {
+            currentState = States.WAITING;
         }
     }
 
+    private void waitingToReachNextFloor() throws InterruptedException {
+        Thread.sleep(10000);
+
+        if(currentState == States.MOVING) {
+            if (currentDirections == Directions.UP) {
+                currentFloor.incrementAndGet();
+            } else if(currentDirections == Directions.DOWN) {
+                currentFloor.decrementAndGet();
+            }
+        }
+    }
+
+    private void popUpDestination() {
+        upDestinationRequest.remove(upDestinationRequest.first());
+        if(upDestinationRequest.size() == 0) {
+            currentDirections = Directions.NONE;
+        }
+    }
+
+    private void popDownDestination() {
+        downDestinationRequest.remove(downDestinationRequest.first());
+        if(downDestinationRequest.size() == 0) {
+            currentDirections = Directions.NONE;
+        }
+    }
     private void openDoor() throws InterruptedException {
         //send event to lift console to open door
         Thread.sleep(10000);
+        System.out.println("Opening door");
     }
 
     private void closeDoor() throws InterruptedException {
-        //send event to lift console to open door
+
+        System.out.println("closing door");
+        //send event to lift console to close door
         Thread.sleep(10000);
     }
 
-    private boolean canMoveUp() {
+    private void setDirections()
+    {
+        if(currentDirections == Directions.NONE) {
 
-        if (currentFloor.get() == endRange) {
-            return false;
-        }
-
-        synchronized (floorToRequestMap) {
-            if (currentDirections == Directions.UP || currentDirections == Directions.DEFAULT) {
-                for (int i = currentFloor.get(); i <= endRange; i++) {
-                    if (floorToRequestMap.get(i) != null) {
-                        return true;
-                    }
+            if(upDestinationRequest.size() > 0 && downDestinationRequest.size() > 0)
+            {
+                if(Math.abs(currentFloor.intValue() - upDestinationRequest.first().intValue()) < Math.abs(currentFloor.intValue() - downDestinationRequest.first().intValue()))
+                {
+                    currentDirections = Directions.UP;
+                } else {
+                    currentDirections = Directions.DOWN;
                 }
+            } else if(upDestinationRequest.size() > 0) {
+                currentDirections = Directions.UP;
+            } else if(downDestinationRequest.size() > 0) {
+                currentDirections = Directions.DOWN;
             }
         }
 
-        return false;
-    }
-
-    private boolean canMoveDown() {
-        if (currentFloor.get() == startRange) {
-            return false;
-        }
-        synchronized (floorToRequestMap) {
-            if (currentDirections == Directions.DOWN || currentDirections == Directions.DEFAULT) {
-                for (int i = currentFloor.get(); i >= startRange; i--) {
-                    if (floorToRequestMap.get(i) != null) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public synchronized void addRequestFromOuterControl(Request request) {
@@ -144,26 +161,16 @@ public class Elevator implements Runnable {
             return;
         }
 
-        if (currentState == States.MOVING) {
-            synchronized (floorToRequestMap) {
-                floorToRequestMap.put(request.getRequestedFloor(), request);
-            }
-            return;
+        if (request.getRequestedFloor() > currentFloor.intValue()) {
+            upDestinationRequest.add(request.getRequestedFloor());
+        } else {
+            downDestinationRequest.add(request.getRequestedFloor());
         }
 
         if (currentState == States.WAITING) {
-            if (request.getRequestedFloor() <= currentFloor.get() && request.getRequestedDirections() == Directions.DOWN) {
-                currentDirections = Directions.DOWN;
-                currentState = States.MOVING;
-                notify();
-            } else if (request.getRequestedFloor() >= currentFloor.get() &&
-                    request.getRequestedDirections() == Directions.UP) {
-                currentDirections = Directions.UP;
-                currentState = States.MOVING;
-                notify();
-            }
+            currentState = States.MOVING;
+            notify();
         }
-
     }
 
     private boolean isValidRequest(Request request) {
