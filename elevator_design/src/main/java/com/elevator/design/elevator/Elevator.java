@@ -3,6 +3,8 @@ package com.elevator.design.elevator;
 import com.elevator.design.Request;
 import com.elevator.design.constants.Directions;
 import com.elevator.design.constants.States;
+import com.elevator.design.handler.inner.InnerRequestHandler;
+import com.elevator.design.handler.inner.InnerRequestHandlerImpl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +33,8 @@ public class Elevator implements Runnable {
 
     private TreeSet<Integer> downDestinationRequest;
 
+    private InnerRequestHandler innerRequestHandler;
+
     public Elevator() {
         upDestinationRequest = new TreeSet<>();
         downDestinationRequest = new TreeSet<>(new Comparator<Integer>() {
@@ -41,6 +45,8 @@ public class Elevator implements Runnable {
         });
         currentDirections = Directions.NONE;
         currentState = States.WAITING;
+        innerRequestHandler = new InnerRequestHandlerImpl();
+        currentFloor = new AtomicInteger(0);
     }
 
     public void run() {

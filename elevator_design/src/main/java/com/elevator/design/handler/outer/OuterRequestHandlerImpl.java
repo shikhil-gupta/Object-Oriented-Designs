@@ -18,7 +18,7 @@ public class OuterRequestHandlerImpl implements IOuterRequestHandler {
         Request request = new Request();
         request.setElevatorId(elevatorId);
         request.setRequestedFloor(floorNo);
-        request.setRequestedDirections(Directions.UP);
+        //request.setRequestedDirections(Directions.UP);
         command.execute(request);
 
     }
@@ -29,7 +29,7 @@ public class OuterRequestHandlerImpl implements IOuterRequestHandler {
         Request request = new Request();
         request.setElevatorId(elevatorId);
         request.setRequestedFloor(floorNo);
-        request.setRequestedDirections(Directions.DOWN);
+        //request.setRequestedDirections(Directions.DOWN);
         command.execute(request);
 
     }

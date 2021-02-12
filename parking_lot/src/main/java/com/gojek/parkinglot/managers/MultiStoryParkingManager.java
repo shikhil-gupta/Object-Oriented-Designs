@@ -34,7 +34,6 @@ public class MultiStoryParkingManager {
         }
     }
 
-
     public MultiStoryParkingManager(final int buildingNo,int startSlotNo, final int totalFloors, final List<Integer> floorsCapacity) {
         this.totalFloors = totalFloors;
         this.totalSlotCapicity = floorsCapacity.stream().reduce(0, Integer::sum);
